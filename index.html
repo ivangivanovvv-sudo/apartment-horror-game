@@ -17,7 +17,6 @@
     }
 
     * { box-sizing: border-box; }
-
     html, body {
       margin: 0; width: 100%; height: 100%; overflow: hidden;
       background: var(--bg); color: white; font-family: Arial, sans-serif;
@@ -36,11 +35,12 @@
     .hidden { display: none !important; }
 
     .panel {
-      width: min(92vw, 700px); background: var(--panel); border: 3px solid rgba(250,204,21,0.8);
+      width: min(92vw, 900px); background: var(--panel); border: 3px solid rgba(250,204,21,0.8);
       border-radius: 18px; padding: 28px 22px 20px; box-shadow: 0 0 26px rgba(0,0,0,0.4); text-align: center;
     }
 
     h1 { margin: 0 0 12px; font-size: clamp(2rem, 5vw, 3rem); color: #fef3c7; }
+    h2 { margin: 6px 0 12px; color: #fef3c7; }
     p { color: #e5e7eb; line-height: 1.6; }
 
     button {
@@ -51,20 +51,16 @@
 
     button:hover { filter: brightness(1.08); }
     button:active { transform: translateY(1px); }
-
     .secondary { background: linear-gradient(180deg, #2563eb, #1d4ed8); }
     .danger { background: linear-gradient(180deg, #ef4444, #b91c1c); }
 
     #chapterList { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; align-items: center; }
-
     .chapter-card {
-      width: min(88%, 540px); padding: 18px 16px; border-radius: 14px; background: rgba(30, 41, 59, 0.85);
+      width: min(88%, 640px); padding: 18px 16px; border-radius: 14px; background: rgba(30, 41, 59, 0.85);
       border: 2px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; gap: 10px;
     }
-
     .chapter-name { font-weight: 700; font-size: 1.1rem; color: #fef3c7; }
     .chapter-meta { color: #dbeafe; font-size: 0.9rem; }
-
     .locked-card { opacity: 0.55; filter: grayscale(0.15); }
 
     #crosshair {
@@ -73,10 +69,9 @@
 
     #inventory {
       position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; gap: 8px;
-      justify-content: center; max-width: min(90vw, 760px); flex-wrap: wrap; padding: 10px 12px; border-radius: 14px;
+      justify-content: center; max-width: min(96vw, 820px); flex-wrap: wrap; padding: 10px 12px; border-radius: 14px;
       background: rgba(15,23,42,0.75); border: 2px solid rgba(245,158,11,0.7); backdrop-filter: blur(7px); z-index: 12;
     }
-
     .inventory-slot {
       min-width: 130px; padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.18);
       background: rgba(30,41,59,0.82); color: white; cursor: pointer; user-select: none; transition: 0.15s ease;
@@ -87,7 +82,6 @@
       border-color: rgba(255,224,164,0.9); box-shadow: 0 0 12px rgba(245,158,11,0.42);
     }
     .inventory-slot.locked { opacity: 0.5; filter: grayscale(0.8); }
-
     .slot-top { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px; }
     .slot-name { font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; }
     .slot-key { font-size:10px; width:18px; height:18px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.08); }
@@ -102,14 +96,18 @@
     }
     .skin-info { display:flex; align-items:center; gap:12px; }
     .skin-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); box-shadow: inset 0 0 6px rgba(255,255,255,0.2); }
-    .skin-preview { margin-top: 12px; padding: 12px; border-radius: 12px; background: rgba(30,41,59,0.8); border: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-    .preview-badge { width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.6); box-shadow: 0 0 18px rgba(255,255,255,0.18); }
+    .skin-preview {
+      margin-top: 12px; padding: 12px; border-radius: 12px; background: rgba(30,41,59,0.8); border: 1px solid rgba(255,255,255,0.1);
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    .preview-badge { width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.6); box-shadow: 0 0 18px rgba(255,255,255,0.18); }
     .stat-box { color: #fef3c7; font-size: 0.88rem; line-height: 1.5; text-align: left; }
     .bank-indicator { color: #facc15; font-weight:700; font-size:0.95rem; }
 
     @media (max-width: 760px) {
       .inventory-slot { min-width: 110px; }
       .chapter-card { flex-direction: column; }
+      .skin-card { flex-direction: column; align-items:flex-start; }
     }
   </style>
 </head>
@@ -150,7 +148,7 @@
         Reload: Right Mouse<br />
         Dash: Shift<br />
         Heal: H<br />
-        Inventory: 1 / 2 / 3<br />
+        Inventory: 1 / 2 / 3 / 4<br />
         Pause: P<br />
         Fullscreen: F
       </div>
@@ -169,6 +167,7 @@
       <h1>Store</h1>
       <div class="bank-indicator" id="bankDisplay">Bank: 0 diamonds</div>
       <div class="bank-indicator" id="creditDisplay" style="margin-top:6px;">Credits: 0</div>
+      <div id="storePreview" style="margin-top:12px; min-height:95px;"></div>
       <div id="storeItems" class="store-list"></div>
       <div style="margin-top:16px;">
         <button class="secondary" onclick="closeStore()">Back</button>
@@ -217,29 +216,29 @@
       3: { name: 'The Frozen Frontier', levels: 10, unlocked: false, boss: 'The Eternal Frost', theme: 'ice' }
     };
 
-    const SAVE_KEY = 'diamond_survivors_save_v2';
-    const STORE_KEY = 'diamond_survivors_store_v2';
+    const SAVE_KEY = 'diamond_survivors_save_v3';
+    const STORE_KEY = 'diamond_survivors_store_v3';
     const WORLD = { width: 1700, height: 980 };
 
     const skinCatalog = {
-      classic: { name: 'Classic', cost: 0, type: 'skin', costType: 'diamond', color: '#1d4ed8', bonus: { speed: 0, crit: 0, range: 0, heal: 0 } },
-      ember: { name: 'Ember', cost: 20, type: 'skin', costType: 'diamond', color: '#f97316', bonus: { speed: 4, crit: 0.03, range: 0, heal: 0 } },
-      royal: { name: 'Royal', cost: 45, type: 'skin', costType: 'diamond', color: '#8b5cf6', bonus: { speed: 0, crit: 0.05, range: 8, heal: 0 } },
-      jade: { name: 'Jade', cost: 75, type: 'skin', costType: 'diamond', color: '#10b981', bonus: { speed: 8, crit: 0, range: 0, heal: 8 } },
-      storm: { name: 'Storm', cost: 100, type: 'skin', costType: 'diamond', color: '#38bdf8', bonus: { speed: 10, crit: 0.04, range: 18, heal: 0 } },
-      crimson: { name: 'Crimson', cost: 140, type: 'skin', costType: 'diamond', color: '#ef4444', bonus: { speed: 0, crit: 0.08, range: 18, heal: 10 } },
-      phantom: { name: 'Phantom Dash', cost: 40, type: 'ability', costType: 'diamond', color: '#a78bfa', bonus: { speed: 14, crit: 0.02, range: 0, heal: 0 } },
-      stormrunner: { name: 'Storm Runner', cost: 70, type: 'ability', costType: 'diamond', color: '#7dd3fc', bonus: { speed: 18, crit: 0.04, range: 0, heal: 0 } },
-      guardian: { name: 'Nature Guardian', cost: 110, type: 'ability', costType: 'diamond', color: '#22c55e', bonus: { speed: 10, crit: 0.06, range: 12, heal: 8 } },
-      inferno: { name: 'Inferno Soul', cost: 180, type: 'ability', costType: 'diamond', color: '#fb923c', bonus: { speed: 16, crit: 0.08, range: 18, heal: 12 } }
+      classic: { name: 'Classic', cost: 0, type: 'skin', costType: 'diamond', color: '#1d4ed8', bonus: { speed: 0, crit: 0, range: 0, heal: 0 }, description: 'Balanced survival outfit.' },
+      ember: { name: 'Ember', cost: 20, type: 'skin', costType: 'diamond', color: '#f97316', bonus: { speed: 4, crit: 0.03, range: 0, heal: 0 }, description: 'Fast combat skin with warm orange tones.' },
+      royal: { name: 'Royal', cost: 45, type: 'skin', costType: 'diamond', color: '#8b5cf6', bonus: { speed: 0, crit: 0.05, range: 8, heal: 0 }, description: 'High-precision skin built for accuracy.' },
+      jade: { name: 'Jade', cost: 75, type: 'skin', costType: 'diamond', color: '#10b981', bonus: { speed: 8, crit: 0, range: 0, heal: 8 }, description: 'Nature-inspired armor with stronger heal output.' },
+      storm: { name: 'Storm', cost: 100, type: 'skin', costType: 'diamond', color: '#38bdf8', bonus: { speed: 10, crit: 0.04, range: 18, heal: 0 }, description: 'Faster movement and stronger power shots.' },
+      crimson: { name: 'Crimson', cost: 140, type: 'skin', costType: 'diamond', color: '#ef4444', bonus: { speed: 0, crit: 0.08, range: 18, heal: 10 }, description: 'Aggressive combat skin with higher crit damage.' },
+      phantom: { name: 'Phantom Dash', cost: 40, type: 'ability', costType: 'diamond', color: '#a78bfa', bonus: { speed: 14, crit: 0.02, range: 0, heal: 0 }, description: 'Short forward dashes with particle trail.' },
+      stormrunner: { name: 'Storm Runner', cost: 70, type: 'ability', costType: 'diamond', color: '#7dd3fc', bonus: { speed: 18, crit: 0.04, range: 0, heal: 0 }, description: 'Boosts movement and visual speed trail.' },
+      guardian: { name: 'Nature Guardian', cost: 110, type: 'ability', costType: 'diamond', color: '#22c55e', bonus: { speed: 10, crit: 0.06, range: 12, heal: 8 }, description: 'Creates a temporary protective barrier.' },
+      inferno: { name: 'Inferno Soul', cost: 180, type: 'ability', costType: 'diamond', color: '#fb923c', bonus: { speed: 16, crit: 0.08, range: 18, heal: 12 }, description: 'Short fire transformation with burning trails.' }
     };
 
     const storeItems = [
-      { id: 'pistol', name: 'Pistol', type: 'weapon', cost: 120, costType: 'credit', color: '#dbeafe' },
-      { id: 'ak47', name: 'AK-47', type: 'weapon', cost: 260, costType: 'credit', color: '#fbbf24' },
-      { id: 'shotgun', name: 'Shotgun', type: 'weapon', cost: 420, costType: 'credit', color: '#fca5a5' },
-      { id: 'medkit', name: 'Medkit Pack', type: 'consumable', cost: 25, costType: 'credit', color: '#86efac' },
-      { id: 'ammo', name: 'Ammo Cache', type: 'consumable', cost: 40, costType: 'credit', color: '#fef3c7' }
+      { id: 'pistol', name: 'Pistol', type: 'weapon', cost: 120, costType: 'credit', color: '#dbeafe', description: 'Reliable sidearm with balanced damage and fast handling.' },
+      { id: 'ak47', name: 'AK-47', type: 'weapon', cost: 260, costType: 'credit', color: '#fbbf24', description: 'Fully automatic rifle with faster fire rate.' },
+      { id: 'shotgun', name: 'Shotgun', type: 'weapon', cost: 420, costType: 'credit', color: '#fca5a5', description: 'Close-range power weapon with heavy spread.' },
+      { id: 'medkit', name: 'Medkit Pack', type: 'consumable', cost: 25, costType: 'credit', color: '#86efac', description: 'Adds one extra heal medicine.' },
+      { id: 'ammo', name: 'Ammo Cache', type: 'consumable', cost: 40, costType: 'credit', color: '#fef3c7', description: 'Adds reserve ammunition for equipped weapons.' }
     ];
 
     const ui = {
@@ -252,6 +251,7 @@
       gameOverText: document.getElementById('gameOverText'),
       chapterList: document.getElementById('chapterList'),
       storeItems: document.getElementById('storeItems'),
+      storePreview: document.getElementById('storePreview'),
       bankDisplay: document.getElementById('bankDisplay'),
       creditDisplay: document.getElementById('creditDisplay'),
       inventory: document.getElementById('inventory'),
@@ -276,7 +276,10 @@
       wind: 0,
       lightning: 0,
       weatherTimer: 0,
-      save: null
+      save: null,
+      obstacles: [],
+      arena: null,
+      activePreview: null
     };
 
     const player = {
@@ -300,7 +303,9 @@
       reloadTimer: 0,
       hitFlash: 0,
       abilityUnlocked: false,
-      abilityName: 'none'
+      abilityName: 'none',
+      defenseAura: 0,
+      dashTrail: 0
     };
 
     const weaponData = {
@@ -358,11 +363,7 @@
     }
 
     function getUnlockedChapters() {
-      return {
-        1: true,
-        2: CHAPTERS[2].unlocked,
-        3: CHAPTERS[3].unlocked
-      };
+      return { 1: true, 2: CHAPTERS[2].unlocked, 3: CHAPTERS[3].unlocked };
     }
 
     function updateContinueButton() {
@@ -447,30 +448,55 @@
         btn.onclick = () => {
           if (unlocked) startChapter(Number(num));
         };
-        card.appendChild(info);
-        card.appendChild(btn);
-        ui.chapterList.appendChild(card);
+        card.appendChild(info); card.appendChild(btn); ui.chapterList.appendChild(card);
       });
+    }
+
+    function createPreviewCard(item) {
+      const itemKey = item.id || item.name;
+      const preview = document.createElement('div');
+      preview.className = 'skin-preview';
+      const swatch = document.createElement('div');
+      swatch.className = 'preview-badge';
+      swatch.style.background = item.color || '#ffffff';
+      const info = document.createElement('div');
+      info.className = 'stat-box';
+      info.innerHTML = `
+        <div><b>${item.name}</b></div>
+        <div>${item.type}</div>
+        <div>${item.description || 'Preview before purchase.'}</div>
+        <div>Price: ${item.cost} ${item.costType || 'credit'}</div>
+      `;
+      preview.appendChild(swatch); preview.appendChild(info);
+      return preview;
     }
 
     function renderStore() {
       ui.storeItems.innerHTML = '';
+      ui.storePreview.innerHTML = '';
       ui.bankDisplay.textContent = `Bank: ${player.diamonds} diamonds`;
       ui.creditDisplay.textContent = `Credits: ${player.credits}`;
 
+      const previewItem = skinCatalog[storeProgress.selectedSkin] || skinCatalog.classic;
+      ui.storePreview.appendChild(createPreviewCard({
+        id: previewItem.name,
+        name: previewItem.name,
+        type: previewItem.type,
+        cost: previewItem.cost,
+        costType: previewItem.costType,
+        color: previewItem.color,
+        description: previewItem.description
+      }));
+
       const skinSection = document.createElement('div');
-      skinSection.className = 'shop-section';
-      skinSection.innerHTML = '<h3>Skins / Abilities</h3>';
+      skinSection.className = 'shop-section'; skinSection.innerHTML = '<h3>Skins / Abilities</h3>';
       ui.storeItems.appendChild(skinSection);
 
       Object.entries(skinCatalog).forEach(([id, data]) => {
         const card = document.createElement('div');
         card.className = 'skin-card';
-        const info = document.createElement('div');
-        info.className = 'skin-info';
-        const swatch = document.createElement('div');
-        swatch.className = 'skin-swatch';
-        swatch.style.background = data.color;
+        const info = document.createElement('div'); info.className = 'skin-info';
+        const swatch = document.createElement('div'); swatch.className = 'skin-swatch'; swatch.style.background = data.color;
         const text = document.createElement('div');
         text.innerHTML = `<div><b>${data.name}</b></div><div>${data.type}</div>`;
         info.appendChild(swatch); info.appendChild(text);
@@ -478,21 +504,22 @@
         const action = document.createElement('button');
         const owned = !!(storeProgress.unlocked[id] || storeProgress.purchasedAbilities[id] || storeProgress.purchasedWeapons[id]);
         if (owned) {
-          action.textContent = 'Owned';
-          action.disabled = true;
-          action.style.opacity = '0.8';
+          action.textContent = 'Owned'; action.disabled = true; action.style.opacity = '0.8';
         } else {
           action.textContent = `${data.cost} ${data.costType === 'diamond' ? 'diamonds' : 'credits'}`;
         }
 
         action.onclick = () => {
-          if ((data.costType === 'diamond' && player.diamonds >= data.cost) || (data.costType === 'credit' && player.credits >= data.cost)) {
+          state.activePreview = { id, ...data };
+          ui.storePreview.innerHTML = '';
+          ui.storePreview.appendChild(createPreviewCard({ ...data, id }));
+          const total = data.costType === 'diamond' ? player.diamonds : player.credits;
+          if (owned) return;
+          if (total >= data.cost) {
             if (data.costType === 'diamond') player.diamonds -= data.cost; else player.credits -= data.cost;
             storeProgress.unlocked[id] = true;
             if (data.type === 'skin') player.skin = id;
-            saveStoreProgressNow();
-            saveGameProgress();
-            renderStore();
+            saveStoreProgressNow(); saveGameProgress(); renderStore();
             return;
           }
         };
@@ -500,42 +527,29 @@
         card.appendChild(info); card.appendChild(action); ui.storeItems.appendChild(card);
       });
 
-      const weaponSection = document.createElement('div');
-      weaponSection.className = 'shop-section';
-      weaponSection.innerHTML = '<h3>Weapons & Supplies</h3>';
-      ui.storeItems.appendChild(weaponSection);
-
+      const weaponSection = document.createElement('div'); weaponSection.className = 'shop-section'; weaponSection.innerHTML = '<h3>Weapons & Supplies</h3>'; ui.storeItems.appendChild(weaponSection);
       storeItems.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'skin-card';
-        const info = document.createElement('div');
-        info.className = 'skin-info';
-        const swatch = document.createElement('div');
-        swatch.className = 'skin-swatch';
-        swatch.style.background = item.color;
-        const text = document.createElement('div');
-        text.innerHTML = `<div><b>${item.name}</b></div><div>${item.type}</div>`;
+        const card = document.createElement('div'); card.className = 'skin-card';
+        const info = document.createElement('div'); info.className = 'skin-info';
+        const swatch = document.createElement('div'); swatch.className = 'skin-swatch'; swatch.style.background = item.color;
+        const text = document.createElement('div'); text.innerHTML = `<div><b>${item.name}</b></div><div>${item.type}</div>`;
         info.appendChild(swatch); info.appendChild(text);
 
         const action = document.createElement('button');
         const owned = player.unlockedWeapons[item.id] || storeProgress.purchasedWeapons[item.id];
-        if (owned) {
-          action.textContent = 'Owned';
-          action.disabled = true;
-          action.style.opacity = '0.8';
-        } else {
-          action.textContent = `${item.cost} ${item.costType}`;
-        }
+        if (owned) { action.textContent = 'Owned'; action.disabled = true; action.style.opacity = '0.8'; }
+        else { action.textContent = `${item.cost} ${item.costType}`; }
 
         action.onclick = () => {
+          state.activePreview = item;
+          ui.storePreview.innerHTML = '';
+          ui.storePreview.appendChild(createPreviewCard(item));
+          if (owned) return;
           if (item.costType === 'credit' && player.credits >= item.cost) {
             player.credits -= item.cost;
             player.unlockedWeapons[item.id] = true;
             storeProgress.purchasedWeapons[item.id] = true;
-            saveStoreProgressNow();
-            saveGameProgress();
-            renderStore();
-            updateInventoryUI();
+            saveStoreProgressNow(); saveGameProgress(); renderStore(); updateInventoryUI();
           }
         };
 
@@ -543,23 +557,61 @@
       });
     }
 
+    function createArena(chapter, bossArena) {
+      const obstacles = [];
+      const arenaW = WORLD.width;
+      const arenaH = WORLD.height;
+      if (bossArena) {
+        const width = arenaW;
+        const height = arenaH;
+        const safePadding = 120;
+        return {
+          x: 0, y: 0, width, height,
+          obstacles: [
+            { x: width * 0.25, y: height * 0.35, r: 58 },
+            { x: width * 0.55, y: height * 0.68, r: 62 },
+            { x: width * 0.75, y: height * 0.45, r: 56 }
+          ],
+          bounds: { minX: safePadding, maxX: width - safePadding, minY: safePadding, maxY: height - safePadding }
+        };
+      }
+
+      for (let i = 0; i < (chapter === 3 ? 18 : chapter === 2 ? 12 : 14); i++) {
+        obstacles.push({ x: random(200, arenaW - 200), y: random(120, arenaH - 120), r: random(18, 38) });
+      }
+      return { x: 0, y: 0, width: arenaW, height: arenaH, obstacles, bounds: { minX: 60, maxX: arenaW - 60, minY: 60, maxY: arenaH - 60 } };
+    }
+
     function buildForestTrees() {
       trees = [];
-      const count = state.chapter === 2 ? 8 : 10;
+      const count = state.chapter === 2 ? 8 : state.chapter === 3 ? 10 : 12;
       for (let i = 0; i < count; i++) {
-        trees.push({ x: 120 + i * 150 + random(-20, 20), y: 120 + (i % 3) * 180 + random(-25, 25), trunk: 18 + random(0, 14), canopy: 28 + random(0, 20), color: state.chapter === 2 ? '#a16207' : '#1c7d3a', sway: random(0, Math.PI * 2) });
+        trees.push({
+          x: 120 + i * 150 + random(-20, 20),
+          y: 120 + (i % 3) * 180 + random(-25, 25),
+          trunk: 18 + random(0, 14),
+          canopy: 28 + random(0, 20),
+          color: state.chapter === 2 ? '#a16207' : state.chapter === 3 ? '#dbeafe' : '#1c7d3a',
+          sway: random(0, Math.PI * 2)
+        });
       }
     }
 
     function buildLeaves() {
       leaves = [];
-      const count = state.chapter === 2 ? 180 : 120;
-      for (let i = 0; i < count; i++) leaves.push({ x: random(0, WORLD.width), y: random(0, WORLD.height), size: random(4, 10), drift: random(0, Math.PI * 2), speed: random(25, 70), color: state.chapter === 2 ? ['#f59e0b', '#f97316', '#ef4444', '#fbbf24'][Math.floor(Math.random() * 4)] : '#4ade80', rot: random(0, Math.PI * 2), spin: random(-2, 2) });
+      const count = state.chapter === 2 ? 180 : state.chapter === 3 ? 220 : 120;
+      for (let i = 0; i < count; i++) {
+        const palette = state.chapter === 3 ? ['#e0f2fe', '#cbd5e1', '#bfdbfe', '#ffffff'] : state.chapter === 2 ? ['#f59e0b', '#f97316', '#ef4444', '#fbbf24'] : ['#4ade80', '#16a34a', '#65a30d'];
+        leaves.push({
+          x: random(0, WORLD.width), y: random(0, WORLD.height), size: random(4, 10), drift: random(0, Math.PI * 2), speed: random(25, 70),
+          color: palette[Math.floor(Math.random() * palette.length)], rot: random(0, Math.PI * 2), spin: random(-2, 2)
+        });
+      }
     }
 
     function buildRain() {
       rain = [];
-      const count = state.chapter === 2 ? 180 : 60;
+      const count = state.chapter === 3 ? 140 : state.chapter === 2 ? 180 : 60;
       for (let i = 0; i < count; i++) rain.push({ x: random(0, WORLD.width), y: random(0, WORLD.height), speed: random(240, 420), alpha: random(0.2, 0.8), length: random(10, 20) });
     }
 
@@ -570,9 +622,19 @@
       player.x = 140; player.y = WORLD.height / 2; player.health = player.maxHealth; player.invulnerable = 0; player.hitFlash = 0; player.recoil = 0; player.shootFlash = 0; player.reloadTimer = 0; player.aimX = 1; player.aimY = 0; player.angle = 0; player.facing = 0; state.cameraShake = 0;
     }
 
+    function buildArenaForLevel() {
+      const isBoss = state.level === CHAPTERS[state.chapter].levels;
+      state.arena = createArena(state.chapter, isBoss);
+      state.obstacles = state.arena.obstacles.slice();
+    }
+
     function startLevel() {
       resetPlayerForLevel();
-      buildForestTrees(); buildLeaves(); buildRain();
+      buildArenaForLevel();
+      buildForestTrees();
+      buildLeaves();
+      buildRain();
+
       diamonds = [];
       const totalDiamonds = 5 + state.level + (state.chapter === 2 ? 2 : 0) + (state.chapter === 3 ? 3 : 0);
       for (let i = 0; i < totalDiamonds; i++) diamonds.push(createDiamond(random(180, WORLD.width - 220), random(80, WORLD.height - 80)));
@@ -580,37 +642,73 @@
       pickups = [];
       if (state.level >= 2 && !player.unlockedWeapons.pistol) pickups.push(createPickup('weapon', 620, 360, { weapon: 'pistol', color: '#60a5fa' }));
       if (state.level >= 3 && !player.unlockedWeapons.ak47) pickups.push(createPickup('weapon', 880, 460, { weapon: 'ak47', color: '#f59e0b' }));
+      if (state.level >= 4 && !player.unlockedWeapons.shotgun) pickups.push(createPickup('weapon', 1120, 300, { weapon: 'shotgun', color: '#fca5a5' }));
       if (state.level >= 2) pickups.push(createPickup('ammo', 700, 540, { weapon: 'pistol', amount: 18, color: '#93c5fd' }));
       if (state.level >= 3) pickups.push(createPickup('ammo', 1000, 520, { weapon: 'ak47', amount: 30, color: '#fbbf24' }));
+      if (state.level >= 4) pickups.push(createPickup('ammo', 1180, 520, { weapon: 'shotgun', amount: 12, color: '#fdd7d7' }));
       for (let i = 0; i < 2 + Math.floor(state.level / 2); i++) pickups.push(createPickup('heal', random(220, WORLD.width - 220), random(200, WORLD.height - 160), { radius: 12 }));
 
-      monsters = [];
-      bullets = []; enemyBullets = []; particles = []; effects = [];
-      const totalEnemies = state.chapter === 2 ? state.level + 2 : state.level + 1 + (state.chapter === 3 ? 2 : 0);
-      for (let i = 0; i < totalEnemies; i++) monsters.push(createMonster());
-      if (state.level === CHAPTERS[state.chapter].levels) monsters.push(createBoss());
+      monsters = []; bullets = []; enemyBullets = []; particles = []; effects = [];
+      const bossFight = state.level === CHAPTERS[state.chapter].levels;
+      if (bossFight) monsters.push(createBoss());
+      else {
+        const totalEnemies = state.chapter === 2 ? state.level + 2 : state.chapter === 3 ? state.level + 3 : state.level + 1;
+        for (let i = 0; i < totalEnemies; i++) monsters.push(createMonster());
+      }
 
-      updateInventoryUI();
-      saveGameProgress();
+      updateInventoryUI(); saveGameProgress();
     }
 
     function createMonster() {
-      const preferFire = state.chapter === 2;
+      const chapter = state.chapter;
       const x = random(320, WORLD.width - 180);
       const y = random(100, WORLD.height - 100);
-      const bossy = state.chapter === 3 && Math.random() < 0.2;
-      const hp = preferFire ? (state.level >= 4 ? 4 : 3) : (state.chapter === 3 ? (state.level >= 5 ? 5 : 4) : (state.level >= 4 ? 3 : 2));
+      const typeRoll = Math.random();
+      let type = 'walker';
+      if (chapter === 1) {
+        if (typeRoll < 0.4) type = 'walker';
+        else if (typeRoll < 0.7) type = 'runner';
+        else if (typeRoll < 0.9) type = 'brute';
+        else type = 'spitter';
+      } else if (chapter === 2) {
+        if (typeRoll < 0.35) type = 'emberling';
+        else if (typeRoll < 0.65) type = 'ash';
+        else if (typeRoll < 0.85) type = 'flame';
+        else type = 'brute';
+      } else {
+        if (typeRoll < 0.3) type = 'snowman';
+        else if (typeRoll < 0.55) type = 'runner';
+        else if (typeRoll < 0.75) type = 'brutal';
+        else if (typeRoll < 0.9) type = 'caster';
+        else type = 'stalker';
+      }
+
+      const baseHealth = chapter === 3 ? 5 : chapter === 2 ? 4 : 3;
+      const health = Math.min(10, baseHealth + state.level / 2 + (type === 'brute' || type === 'brutal' ? 2 : 0));
       return {
-        x, y, radius: bossy ? 22 : 17,
-        speed: preferFire ? 48 + state.level * 6 : 42 + state.level * 5,
-        maxHealth: hp, health: hp, fire: preferFire, attackCooldown: random(0.8, 1.8), hitFlash: 0, dead: false,
-        bossy, isBoss: false, color: preferFire ? '#f97316' : '#7bcf72'
+        x, y, radius: type === 'brute' || type === 'brutal' ? 24 : 17,
+        speed: type === 'runner' || type === 'emberling' || type === 'snowman' ? 60 + state.level * 4 : type === 'spitter' || type === 'caster' ? 35 + state.level * 3 : 42 + state.level * 5,
+        maxHealth: health,
+        health: health,
+        fire: chapter === 2 || type === 'emberling' || type === 'flame',
+        type,
+        attackCooldown: random(0.8, 1.8),
+        hitFlash: 0,
+        dead: false,
+        phase: 0,
+        boss: false,
+        color: chapter === 3 ? '#dbeafe' : chapter === 2 ? '#f97316' : '#7bcf72'
       };
     }
 
     function createBoss() {
+      const chapter = state.chapter;
       return {
-        x: WORLD.width - 240, y: WORLD.height / 2, radius: 46, boss: true, maxHealth: state.chapter === 2 ? 90 : state.chapter === 3 ? 130 : 120, health: state.chapter === 2 ? 90 : state.chapter === 3 ? 130 : 120, speed: 34, fire: state.chapter === 2, attackCooldown: 1.2, hitFlash: 0, dead: false, summonCooldown: 3.5
+        x: WORLD.width - 240, y: WORLD.height / 2, radius: chapter === 3 ? 56 : 46, boss: true, maxHealth: chapter === 3 ? 160 : chapter === 2 ? 95 : 120,
+        health: chapter === 3 ? 160 : chapter === 2 ? 95 : 120,
+        speed: 34, fire: chapter === 2, attackCooldown: 1.2, hitFlash: 0, dead: false, summonCooldown: 3.5,
+        phase: 0, jumpTimer: 0, stormTimer: 0, type: chapter === 3 ? 'snowman' : chapter === 2 ? 'fireboss' : 'zombieboss',
+        color: chapter === 3 ? '#dbeafe' : chapter === 2 ? '#fb923c' : '#6b7280'
       };
     }
 
@@ -647,8 +745,7 @@
 
     function pauseGame() {
       if (state.gameState === 'playing') {
-        state.gameState = 'paused';
-        showScreen('pause');
+        state.gameState = 'paused'; showScreen('pause');
       }
     }
 
@@ -668,8 +765,7 @@
           if (mob.dead) continue;
           if (dist({ x: attackX, y: attackY }, mob) < mob.radius + 25) {
             mob.health -= weaponData.knife.damage;
-            mob.hitFlash = 0.18;
-            makeBurst(mob.x, mob.y, '#fca5a5', 8);
+            mob.hitFlash = 0.18; makeBurst(mob.x, mob.y, '#fca5a5', 8);
             if (mob.health <= 0) killMonster(mob);
           }
         }
@@ -677,16 +773,14 @@
       }
 
       if (player.mag[weapon] <= 0) { reloadWeapon(); return; }
-
       const bulletSpeed = weapon === 'pistol' ? 560 : weapon === 'shotgun' ? 470 : 650;
       const pellets = weapon === 'shotgun' ? 6 : 1;
       for (let i = 0; i < pellets; i++) {
         const spread = weapon === 'shotgun' ? random(-0.25, 0.25) : 0;
+        const angle = Math.atan2(player.aimY, player.aimX) + spread;
         bullets.push({
-          x: player.x,
-          y: player.y,
-          vx: Math.cos(Math.atan2(player.aimY, player.aimX) + spread) * bulletSpeed,
-          vy: Math.sin(Math.atan2(player.aimY, player.aimX) + spread) * bulletSpeed,
+          x: player.x, y: player.y,
+          vx: Math.cos(angle) * bulletSpeed, vy: Math.sin(angle) * bulletSpeed,
           radius: weapon === 'shotgun' ? 5 : 4,
           damage: weaponData[weapon].damage,
           color: weapon === 'pistol' ? '#dbeafe' : weapon === 'shotgun' ? '#fca5a5' : '#fef08a',
@@ -694,12 +788,7 @@
         });
       }
 
-      player.mag[weapon] -= 1;
-      state.attackCooldown = weaponData[weapon].cooldown;
-      player.shootFlash = 0.18;
-      player.recoil = 1;
-      makeBurst(player.x + player.aimX * 18, player.y + player.aimY * 18, '#fef3c7', 6);
-      updateInventoryUI();
+      player.mag[weapon] -= 1; state.attackCooldown = weaponData[weapon].cooldown; player.shootFlash = 0.18; player.recoil = 1; makeBurst(player.x + player.aimX * 18, player.y + player.aimY * 18, '#fef3c7', 6); updateInventoryUI();
     }
 
     function reloadWeapon() {
@@ -708,101 +797,94 @@
       const weapon = player.weapon;
       if (player.mag[weapon] >= weaponData[weapon].magSize) return;
       if (player.ammo[weapon] <= 0) return;
-      player.reloadTimer = weaponData[weapon].reload;
-      effects.push({ type: 'reload', timer: weaponData[weapon].reload, life: weaponData[weapon].reload, color: '#dbeafe' });
+      player.reloadTimer = weaponData[weapon].reload; effects.push({ type: 'reload', timer: weaponData[weapon].reload, life: weaponData[weapon].reload, color: '#dbeafe' });
     }
 
     function finishReload() {
-      const weapon = player.weapon;
-      if (weapon === 'knife') return;
-      const maxMag = weaponData[weapon].magSize;
-      const needed = maxMag - player.mag[weapon];
-      const amount = Math.min(needed, player.ammo[weapon]);
-      if (amount > 0) { player.mag[weapon] += amount; player.ammo[weapon] -= amount; }
+      const weapon = player.weapon; if (weapon === 'knife') return;
+      const maxMag = weaponData[weapon].magSize; const needed = maxMag - player.mag[weapon];
+      const amount = Math.min(needed, player.ammo[weapon]); if (amount > 0) { player.mag[weapon] += amount; player.ammo[weapon] -= amount; }
       updateInventoryUI();
     }
 
     function useHeal() {
-      if (state.gameState !== 'playing') return;
-      if (player.healCount <= 0) return;
-      if (player.health >= player.maxHealth) return;
-      player.healCount -= 1;
-      player.health = Math.min(player.maxHealth, player.health + 35 + player.healBonus);
-      makeBurst(player.x, player.y, '#86efac', 14);
-      effects.push({ type: 'text', text: 'HEAL!', x: canvas.width / 2, y: canvas.height / 2, life: 0.8, color: '#ffffff' });
-      updateInventoryUI();
+      if (state.gameState !== 'playing') return; if (player.healCount <= 0) return; if (player.health >= player.maxHealth) return;
+      player.healCount -= 1; player.health = Math.min(player.maxHealth, player.health + 35 + player.healBonus); makeBurst(player.x, player.y, '#86efac', 14); effects.push({ type: 'text', text: 'HEAL!', x: canvas.width / 2, y: canvas.height / 2, life: 0.8, color: '#ffffff' }); updateInventoryUI();
     }
 
     function makeBurst(x, y, color, count) {
-      for (let i = 0; i < count; i++) {
-        particles.push({ x, y, vx: random(-70, 70), vy: random(-70, 70), life: random(0.3, 0.8), radius: random(2, 6), color });
-      }
+      for (let i = 0; i < count; i++) particles.push({ x, y, vx: random(-70, 70), vy: random(-70, 70), life: random(0.3, 0.8), radius: random(2, 6), color });
     }
 
     function killMonster(mob) {
-      mob.dead = true;
-      makeBurst(mob.x, mob.y, mob.boss ? '#f97316' : '#ef4444', mob.boss ? 26 : 18);
-      player.credits += mob.boss ? 50 : 10;
+      mob.dead = true; makeBurst(mob.x, mob.y, mob.boss ? '#f97316' : '#ef4444', mob.boss ? 26 : 18); player.credits += mob.boss ? 50 : 10;
       if (mob.boss) {
-        player.diamonds += 10;
-        effects.push({ type: 'text', text: 'BOSS DOWN!', x: canvas.width / 2, y: canvas.height / 2, life: 1.5, color: '#fff' });
-        unlockNextChapter();
-        completeLevel();
+        player.diamonds += 10; effects.push({ type: 'text', text: 'BOSS DOWN!', x: canvas.width / 2, y: canvas.height / 2, life: 1.5, color: '#fff' });
+        unlockNextChapter(); completeLevel();
       }
     }
 
     function unlockNextChapter() {
-      const next = state.chapter + 1;
-      if (CHAPTERS[next]) CHAPTERS[next].unlocked = true;
+      const next = state.chapter + 1; if (CHAPTERS[next]) CHAPTERS[next].unlocked = true;
+    }
+
+    function collectPickup(item) {
+      if (item.type === 'weapon') {
+        player.unlockedWeapons[item.weapon] = true; player.weapon = item.weapon; if (item.weapon === 'pistol') { player.ammo.pistol += 18; if (player.mag.pistol <= 0) player.mag.pistol = Math.min(weaponData.pistol.magSize, player.ammo.pistol); }
+        if (item.weapon === 'ak47') { player.ammo.ak47 += 30; if (player.mag.ak47 <= 0) player.mag.ak47 = Math.min(weaponData.ak47.magSize, player.ammo.ak47); }
+        if (item.weapon === 'shotgun') { player.ammo.shotgun += 12; if (player.mag.shotgun <= 0) player.mag.shotgun = Math.min(weaponData.shotgun.magSize, player.ammo.shotgun); }
+      }
+      if (item.type === 'ammo') { player.ammo[item.weapon] += item.amount; }
+      if (item.type === 'heal') { player.healCount += 1; }
+      item.collected = true; updateInventoryUI(); saveGameProgress();
     }
 
     function completeLevel() {
       if (state.level >= CHAPTERS[state.chapter].levels) {
         ui.winText.textContent = `You cleared ${CHAPTERS[state.chapter].name}.`;
-        showScreen('win');
-        state.gameState = 'won';
-        saveGameProgress();
-        return;
+        showScreen('win'); state.gameState = 'won'; saveGameProgress(); return;
       }
-      state.level += 1;
-      effects.push({ type: 'text', text: `LEVEL ${state.level}`, x: canvas.width / 2, y: canvas.height / 2, life: 1.2, color: '#ffffff' });
-      startLevel();
+      state.level += 1; effects.push({ type: 'text', text: `LEVEL ${state.level}`, x: canvas.width / 2, y: canvas.height / 2, life: 1.2, color: '#ffffff' }); startLevel();
     }
 
     function showGameOver() {
-      hideAllMenus(); showScreen('gameOver'); state.gameState = 'gameover';
-      ui.gameOverText.textContent = `You died in ${CHAPTERS[state.chapter].name}, level ${state.level}.`;
-      saveGameProgress();
+      hideAllMenus(); showScreen('gameOver'); state.gameState = 'gameover'; ui.gameOverText.textContent = `You died in ${CHAPTERS[state.chapter].name}, level ${state.level}.`; saveGameProgress();
     }
 
     function updateBullets(dt) {
       for (let i = bullets.length - 1; i >= 0; i--) {
-        const bullet = bullets[i];
-        bullet.x += bullet.vx * dt; bullet.y += bullet.vy * dt; bullet.life -= dt;
-        let hitEnemy = false;
+        const bullet = bullets[i]; bullet.x += bullet.vx * dt; bullet.y += bullet.vy * dt; bullet.life -= dt; let hitEnemy = false;
         for (const mob of monsters) {
           if (mob.dead) continue;
           if (dist(bullet, mob) < mob.radius + bullet.radius) {
-            mob.health -= bullet.damage;
-            mob.hitFlash = 0.18;
-            makeBurst(bullet.x, bullet.y, '#fef08a', 5);
-            if (mob.health <= 0) killMonster(mob);
-            hitEnemy = true; break;
+            mob.health -= bullet.damage; mob.hitFlash = 0.18; makeBurst(bullet.x, bullet.y, '#fef08a', 5);
+            if (mob.health <= 0) killMonster(mob); hitEnemy = true; break;
           }
         }
         if (hitEnemy || bullet.life <= 0 || bullet.x < 0 || bullet.y < 0 || bullet.x > WORLD.width || bullet.y > WORLD.height) bullets.splice(i, 1);
       }
 
       for (let i = enemyBullets.length - 1; i >= 0; i--) {
-        const bullet = enemyBullets[i];
-        bullet.x += bullet.vx * dt; bullet.y += bullet.vy * dt; bullet.life -= dt;
+        const bullet = enemyBullets[i]; bullet.x += bullet.vx * dt; bullet.y += bullet.vy * dt; bullet.life -= dt;
         if (dist(player, bullet) < player.radius + bullet.radius) {
-          player.health -= bullet.damage; player.invulnerable = 0.4; player.hitFlash = 0.4; makeBurst(player.x, player.y, '#ef4444', 8);
-          if (player.health <= 0) showGameOver();
-          enemyBullets.splice(i, 1); continue;
+          const damage = bullet.type === 'snowball' ? 9 : bullet.type === 'storm' ? 12 : 8;
+          player.health -= damage; player.invulnerable = 0.4; player.hitFlash = 0.4; makeBurst(player.x, player.y, '#ef4444', 8); if (player.health <= 0) showGameOver(); enemyBullets.splice(i, 1); continue;
         }
         if (bullet.life <= 0 || bullet.x < 0 || bullet.y < 0 || bullet.x > WORLD.width || bullet.y > WORLD.height) enemyBullets.splice(i, 1);
       }
+    }
+
+    function avoidObstacles(mob, vx, vy) {
+      let finalX = vx; let finalY = vy;
+      for (const obs of state.obstacles) {
+        const dx = mob.x - obs.x; const dy = mob.y - obs.y; const distToObs = Math.hypot(dx, dy) || 1;
+        const minDist = obs.r + mob.radius + 8;
+        if (distToObs < minDist) {
+          const pushX = (dx / distToObs) * (minDist - distToObs); finalX += pushX * 0.7;
+          const pushY = (dy / distToObs) * (minDist - distToObs); finalY += pushY * 0.7;
+        }
+      }
+      return { x: finalX, y: finalY };
     }
 
     function updatePlayer(dt) {
@@ -813,95 +895,92 @@
       if (state.keys['d'] || state.keys['arrowright']) moveX += 1;
 
       if (moveX || moveY) {
-        const len = Math.hypot(moveX, moveY) || 1;
-        moveX /= len; moveY /= len;
-        player.x += moveX * player.speed * dt;
-        player.y += moveY * player.speed * dt;
-        player.x = clamp(player.x, player.radius, WORLD.width - player.radius);
-        player.y = clamp(player.y, player.radius, WORLD.height - player.radius);
+        const len = Math.hypot(moveX, moveY) || 1; moveX /= len; moveY /= len; const targetX = moveX * player.speed * dt; const targetY = moveY * player.speed * dt; player.x += targetX; player.y += targetY;
       }
 
-      const mouseX = state.mouse.x - canvas.width / 2;
-      const mouseY = state.mouse.y - canvas.height / 2;
-      const mag = Math.hypot(mouseX, mouseY) || 1;
+      for (const obs of state.obstacles) {
+        const dx = player.x - obs.x; const dy = player.y - obs.y; const distToObs = Math.hypot(dx, dy) || 1; const minDist = obs.r + player.radius + 4;
+        if (distToObs < minDist) {
+          const push = (minDist - distToObs) * 0.8; player.x += (dx / distToObs) * push; player.y += (dy / distToObs) * push;
+        }
+      }
+
+      player.x = clamp(player.x, player.radius, WORLD.width - player.radius); player.y = clamp(player.y, player.radius, WORLD.height - player.radius);
+
+      const mouseX = state.mouse.x - canvas.width / 2; const mouseY = state.mouse.y - canvas.height / 2; const mag = Math.hypot(mouseX, mouseY) || 1;
       player.aimX = mouseX / mag; player.aimY = mouseY / mag; player.angle = Math.atan2(player.aimY, player.aimX); player.facing = player.angle;
 
       if (player.reloadTimer > 0) { player.reloadTimer -= dt; if (player.reloadTimer <= 0) finishReload(); }
       player.shootFlash = Math.max(0, player.shootFlash - dt * 5); player.invulnerable = Math.max(0, player.invulnerable - dt); player.hitFlash = Math.max(0, player.hitFlash - dt * 2);
-      state.attackCooldown = Math.max(0, state.attackCooldown - dt);
-      state.dashCooldown = Math.max(0, state.dashCooldown - dt);
-      state.dashTimer = Math.max(0, state.dashTimer - dt);
+      state.attackCooldown = Math.max(0, state.attackCooldown - dt); state.dashCooldown = Math.max(0, state.dashCooldown - dt); state.dashTimer = Math.max(0, state.dashTimer - dt);
 
       if (state.keys['shift'] && state.dashCooldown <= 0 && state.dashTimer <= 0) {
-        const dashPower = 180;
-        player.x += player.aimX * dashPower; player.y += player.aimY * dashPower;
-        player.x = clamp(player.x, player.radius, WORLD.width - player.radius);
-        player.y = clamp(player.y, player.radius, WORLD.height - player.radius);
-        state.dashCooldown = 0.9;
-        state.dashTimer = 0.18;
-        makeBurst(player.x, player.y, '#fef3c7', 16);
+        const dashPower = 180; player.x += player.aimX * dashPower; player.y += player.aimY * dashPower; player.x = clamp(player.x, player.radius, WORLD.width - player.radius); player.y = clamp(player.y, player.radius, WORLD.height - player.radius); state.dashCooldown = 0.9; state.dashTimer = 0.18; makeBurst(player.x, player.y, '#fef3c7', 16);
       }
 
-      for (const item of pickups) {
-        if (!item.collected && dist(player, item) < player.radius + item.radius + 2) collectPickup(item);
-      }
-
+      for (const item of pickups) { if (!item.collected && dist(player, item) < player.radius + item.radius + 2) collectPickup(item); }
       for (const diamond of diamonds) {
-        if (!diamond.collected && dist(player, diamond) < player.radius + diamond.radius + 4) {
-          diamond.collected = true; player.diamonds += 1; makeBurst(diamond.x, diamond.y, '#38bdf8', 10); renderStore(); saveGameProgress();
-        }
+        if (!diamond.collected && dist(player, diamond) < player.radius + diamond.radius + 4) { diamond.collected = true; player.diamonds += 1; makeBurst(diamond.x, diamond.y, '#38bdf8', 10); renderStore(); saveGameProgress(); }
       }
 
       if (player.health <= 0) showGameOver();
     }
 
-    function collectPickup(item) {
-      if (item.type === 'weapon') {
-        player.unlockedWeapons[item.weapon] = true;
-        player.weapon = item.weapon;
-        if (item.weapon === 'pistol') { player.ammo.pistol += 18; if (player.mag.pistol <= 0) player.mag.pistol = Math.min(weaponData.pistol.magSize, player.ammo.pistol); }
-        if (item.weapon === 'ak47') { player.ammo.ak47 += 30; if (player.mag.ak47 <= 0) player.mag.ak47 = Math.min(weaponData.ak47.magSize, player.ammo.ak47); }
-      }
-      if (item.type === 'ammo') { player.ammo[item.weapon] += item.amount; }
-      if (item.type === 'heal') { player.healCount += 1; }
-      item.collected = true; updateInventoryUI(); saveGameProgress();
-    }
-
     function updateMonsters(dt) {
       for (let i = monsters.length - 1; i >= 0; i--) {
-        const mob = monsters[i];
-        if (mob.dead) continue;
-
-        mob.hitFlash = Math.max(0, mob.hitFlash - dt * 2);
-        mob.attackCooldown -= dt;
-
-        const dx = player.x - mob.x; const dy = player.y - mob.y; const distToPlayer = Math.hypot(dx, dy) || 1;
-        const dirX = dx / distToPlayer; const dirY = dy / distToPlayer;
+        const mob = monsters[i]; if (mob.dead) continue; mob.hitFlash = Math.max(0, mob.hitFlash - dt * 2); mob.attackCooldown -= dt;
+        const dx = player.x - mob.x; const dy = player.y - mob.y; const distToPlayer = Math.hypot(dx, dy) || 1; const dirX = dx / distToPlayer; const dirY = dy / distToPlayer;
 
         if (mob.boss) {
           mob.summonCooldown = mob.summonCooldown || 3.5; mob.summonCooldown -= dt;
           if (mob.summonCooldown <= 0) { monsters.push(createMonster()); mob.summonCooldown = 3.5; }
-          const push = 1.5;
-          mob.x += dirX * mob.speed * push * dt; mob.y += dirY * mob.speed * push * dt;
-          mob.x = clamp(mob.x, mob.radius, WORLD.width - mob.radius); mob.y = clamp(mob.y, mob.radius, WORLD.height - mob.radius);
-          if (Math.random() < 0.03 && mob.attackCooldown <= 0) {
-            const spread = random(-0.7, 0.7); const speed = 350 + state.level * 15; const angle = Math.atan2(player.y - mob.y, player.x - mob.x) + spread;
-            enemyBullets.push({ x: mob.x, y: mob.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, radius: 12, damage: 10, life: 2.2, color: '#f97316' });
-            mob.attackCooldown = 1.1;
+          if (mob.type === 'zombieboss') {
+            mob.phase = mob.health < mob.maxHealth * 0.5 ? 1 : 0;
+            const runSpeed = mob.phase === 1 ? 1.7 : 1.15;
+            let moveX = dirX * mob.speed * runSpeed * dt; let moveY = dirY * mob.speed * runSpeed * dt;
+            const local = avoidObstacles(mob, moveX, moveY); moveX = local.x; moveY = local.y; mob.x += moveX; mob.y += moveY;
+            mob.x = clamp(mob.x, mob.radius, WORLD.width - mob.radius); mob.y = clamp(mob.y, mob.radius, WORLD.height - mob.radius);
+            if (distToPlayer < 200 && mob.attackCooldown <= 0) {
+              const leap = mob.phase === 1 ? 1.8 : 1.2;
+              const dmg = mob.phase === 1 ? 18 : 12;
+              player.health -= dmg; player.invulnerable = 0.38; player.hitFlash = 0.5; makeBurst(player.x, player.y, '#ef4444', 10); effects.push({ type: 'text', text: 'BOSS LEAP!', x: canvas.width / 2, y: canvas.height / 2, life: 0.8, color: '#fca5a5' }); mob.attackCooldown = 1.6 * leap;
+              if (player.health <= 0) showGameOver();
+            }
+          } else if (mob.type === 'snowman') {
+            const attack = Math.random() < 0.05 && mob.attackCooldown <= 0;
+            let moveX = dirX * mob.speed * 1.1 * dt; let moveY = dirY * mob.speed * 1.1 * dt; const local = avoidObstacles(mob, moveX, moveY); moveX = local.x; moveY = local.y; mob.x += moveX; mob.y += moveY; mob.x = clamp(mob.x, mob.radius, WORLD.width - mob.radius); mob.y = clamp(mob.y, mob.radius, WORLD.height - mob.radius);
+            if (attack) {
+              const angle = Math.atan2(player.y - mob.y, player.x - mob.x);
+              const snowballSpeed = 320;
+              enemyBullets.push({ x: mob.x, y: mob.y, vx: Math.cos(angle) * snowballSpeed, vy: Math.sin(angle) * snowballSpeed, radius: 12, damage: 9, life: 2.2, color: '#dbeafe', type: 'snowball' });
+              if (Math.random() < 0.4) {
+                const lane = Math.random() < 0.5 ? 0 : Math.PI;
+                enemyBullets.push({ x: mob.x, y: mob.y, vx: Math.cos(angle + lane) * snowballSpeed * 0.7, vy: Math.sin(angle + lane) * snowballSpeed * 0.7, radius: 9, damage: 7, life: 2.2, color: '#e0f2fe', type: 'storm' });
+              }
+              mob.attackCooldown = 1.5;
+            }
+          } else {
+            let moveX = dirX * mob.speed * 1.2 * dt; let moveY = dirY * mob.speed * 1.2 * dt; const local = avoidObstacles(mob, moveX, moveY); moveX = local.x; moveY = local.y; mob.x += moveX; mob.y += moveY; mob.x = clamp(mob.x, mob.radius, WORLD.width - mob.radius); mob.y = clamp(mob.y, mob.radius, WORLD.height - mob.radius);
+            if (distToPlayer < 220 && mob.attackCooldown <= 0) {
+              enemyBullets.push({ x: mob.x, y: mob.y, vx: dirX * 260, vy: dirY * 260, radius: 10, damage: 8, life: 2.1, color: '#f97316' }); mob.attackCooldown = 1.1;
+            }
           }
         } else {
-          if (distToPlayer > 120) { mob.x += dirX * mob.speed * dt; mob.y += dirY * mob.speed * dt; }
+          let moveX = dirX * mob.speed * dt; let moveY = dirY * mob.speed * dt; if (distToPlayer > 120) { const local = avoidObstacles(mob, moveX, moveY); moveX = local.x; moveY = local.y; mob.x += moveX; mob.y += moveY; }
           if (distToPlayer < 240 && mob.attackCooldown <= 0) {
-            if (mob.fire) {
-              enemyBullets.push({ x: mob.x, y: mob.y, vx: dirX * 260, vy: dirY * 260, radius: 8, damage: 8, life: 2.3, color: '#f97316' });
+            if (mob.type === 'spitter' || mob.type === 'caster' || mob.type === 'snowman') {
+              const angle = Math.atan2(player.y - mob.y, player.x - mob.x);
+              const speed = mob.type === 'snowman' ? 260 : 210; enemyBullets.push({ x: mob.x, y: mob.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, radius: mob.type === 'snowman' ? 10 : 8, damage: mob.type === 'snowman' ? 8 : 6, life: 2.2, color: mob.type === 'snowman' ? '#dbeafe' : '#ef4444', type: mob.type === 'snowman' ? 'snowball' : 'enemy' });
+            } else if (mob.fire) {
+              enemyBullets.push({ x: mob.x, y: mob.y, vx: dirX * 280, vy: dirY * 280, radius: 8, damage: 8, life: 2.3, color: '#f97316' });
             } else {
               player.health -= 8; player.invulnerable = 0.3; player.hitFlash = 0.5; makeBurst(player.x, player.y, '#ef4444', 8);
             }
-            mob.attackCooldown = mob.fire ? 1.2 : 0.9;
+            mob.attackCooldown = mob.fire ? 1.2 : mob.type === 'runner' ? 0.75 : 0.9;
             if (player.health <= 0) showGameOver();
           }
+          mob.x = clamp(mob.x, mob.radius, WORLD.width - mob.radius); mob.y = clamp(mob.y, mob.radius, WORLD.height - mob.radius);
         }
-        mob.x = clamp(mob.x, mob.radius, WORLD.width - mob.radius); mob.y = clamp(mob.y, mob.radius, WORLD.height - mob.radius);
       }
     }
 
@@ -913,32 +992,27 @@
     function updateWeather(dt) {
       state.time += dt; state.wind += Math.sin(state.time * 0.7) * 0.03;
       for (const leaf of leaves) {
-        leaf.x += (state.wind * 80 + Math.sin(state.time + leaf.drift) * 10) * dt; leaf.y += leaf.speed * dt; leaf.rot += leaf.spin * dt;
-        if (leaf.y > WORLD.height + 10) { leaf.y = -10; leaf.x = random(0, WORLD.width); }
+        leaf.x += (state.wind * 80 + Math.sin(state.time + leaf.drift) * 10) * dt; leaf.y += leaf.speed * dt; leaf.rot += leaf.spin * dt; if (leaf.y > WORLD.height + 10) { leaf.y = -10; leaf.x = random(0, WORLD.width); }
       }
       for (const drop of rain) {
-        drop.y += drop.speed * dt; drop.x += Math.sin(state.time + drop.y) * 10 * dt;
-        if (drop.y > WORLD.height + 10) { drop.y = -10; drop.x = random(0, WORLD.width); }
+        drop.y += drop.speed * dt; drop.x += Math.sin(state.time + drop.y) * 10 * dt; if (drop.y > WORLD.height + 10) { drop.y = -10; drop.x = random(0, WORLD.width); }
       }
     }
 
     function updateCamera() {
-      state.camera.x = clamp(player.x - canvas.width / 2, 0, WORLD.width - canvas.width);
-      state.camera.y = clamp(player.y - canvas.height / 2, 0, WORLD.height - canvas.height);
+      state.camera.x = clamp(player.x - canvas.width / 2, 0, WORLD.width - canvas.width); state.camera.y = clamp(player.y - canvas.height / 2, 0, WORLD.height - canvas.height);
       state.cameraShake *= 0.84;
     }
 
     function drawAtmosphere() {
-      const isAutumn = state.chapter === 2;
-      const isIce = state.chapter === 3;
+      const chapter = state.chapter; const isAutumn = chapter === 2; const isIce = chapter === 3;
       const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
       grad.addColorStop(0, isIce ? '#102f46' : isAutumn ? '#1f1b16' : '#5ec8ff');
       grad.addColorStop(0.5, isIce ? '#89a3c4' : isAutumn ? '#8b3b18' : '#75d37b');
       grad.addColorStop(1, isIce ? '#16243d' : isAutumn ? '#2a1d18' : '#2d5b3b');
       ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      const sunX = canvas.width * 0.85; const sunY = canvas.height * 0.2;
-      const glow = ctx.createRadialGradient(sunX, sunY, 4, sunX, sunY, isIce ? 180 : 150);
+      const sunX = canvas.width * 0.85; const sunY = canvas.height * 0.2; const glow = ctx.createRadialGradient(sunX, sunY, 4, sunX, sunY, isIce ? 180 : 150);
       glow.addColorStop(0, isIce ? 'rgba(191,219,254,0.7)' : isAutumn ? 'rgba(251,146,60,0.8)' : 'rgba(253,224,71,0.9)');
       glow.addColorStop(0.4, isIce ? 'rgba(191,219,254,0.18)' : isAutumn ? 'rgba(251,146,60,0.3)' : 'rgba(253,224,71,0.24)');
       glow.addColorStop(1, 'rgba(255,255,255,0)');
@@ -948,9 +1022,16 @@
     function drawGround() {
       ctx.save(); ctx.translate(-state.camera.x, -state.camera.y);
       const ground = ctx.createLinearGradient(0, 0, 0, WORLD.height);
-      ground.addColorStop(0, state.chapter === 2 ? '#68472d' : state.chapter === 3 ? '#a4bfd3' : '#2d7a3f');
-      ground.addColorStop(1, state.chapter === 2 ? '#221915' : state.chapter === 3 ? '#75899b' : '#163a2a');
+      ground.addColorStop(0, state.chapter === 2 ? '#68472d' : state.chapter === 3 ? '#b7d0e4' : '#2d7a3f');
+      ground.addColorStop(1, state.chapter === 2 ? '#221915' : state.chapter === 3 ? '#7d93aa' : '#163a2a');
       ctx.fillStyle = ground; ctx.fillRect(0, 0, WORLD.width, WORLD.height);
+
+      if (state.chapter === 3) {
+        ctx.fillStyle = 'rgba(224,242,254,0.45)';
+        ctx.fillRect(180, 160, 420, 200);
+        ctx.fillRect(980, 230, 480, 220);
+        ctx.strokeStyle = '#dbeafe'; ctx.lineWidth = 2; ctx.strokeRect(180, 160, 420, 200); ctx.strokeRect(980, 230, 480, 220);
+      }
 
       for (let i = 0; i < 140; i++) {
         const x = (i * 79) % WORLD.width; const y = (i * 47) % WORLD.height; const sway = Math.sin(state.time * 0.8 + x * 0.1) * 4;
@@ -958,19 +1039,24 @@
         ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + sway, y - 18); ctx.stroke();
       }
 
+      if (state.obstacles) {
+        for (const obs of state.obstacles) {
+          ctx.fillStyle = state.chapter === 3 ? '#dbeafe' : state.chapter === 2 ? '#4b2d1d' : '#5b3a2a';
+          ctx.beginPath(); ctx.arc(obs.x, obs.y, obs.r, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+
       for (const tree of trees) {
-        ctx.save(); ctx.translate(tree.x, tree.y);
-        const sway = Math.sin(state.time * 2 + tree.sway) * 10;
+        ctx.save(); ctx.translate(tree.x, tree.y); const sway = Math.sin(state.time * 2 + tree.sway) * 10;
         ctx.strokeStyle = '#4b2d1d'; ctx.lineWidth = tree.trunk * 0.55; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, 100); ctx.stroke();
-        ctx.fillStyle = tree.color; ctx.beginPath(); ctx.arc(sway, -10, tree.canopy, 0, Math.PI * 2); ctx.fill();
-        ctx.restore();
+        ctx.fillStyle = tree.color; ctx.beginPath(); ctx.arc(sway, -10, tree.canopy, 0, Math.PI * 2); ctx.fill(); ctx.restore();
       }
       ctx.restore();
     }
 
     function drawWeather() {
       ctx.save(); ctx.translate(-state.camera.x, -state.camera.y);
-      if (state.chapter === 2) {
+      if (state.chapter === 2 || state.chapter === 3) {
         for (const drop of rain) {
           ctx.strokeStyle = `rgba(255,255,255,${drop.alpha})`; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(drop.x, drop.y); ctx.lineTo(drop.x, drop.y + drop.length); ctx.stroke();
         }
@@ -984,10 +1070,8 @@
     function drawDiamonds() {
       ctx.save(); ctx.translate(-state.camera.x, -state.camera.y);
       for (const diamond of diamonds) {
-        if (diamond.collected) continue;
-        const pulse = Math.sin(state.time * 5 + diamond.pulse) * 2; const size = diamond.radius + pulse;
-        ctx.save(); ctx.translate(diamond.x, diamond.y);
-        ctx.fillStyle = '#38bdf8'; ctx.strokeStyle = '#dbeafe'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -size); ctx.lineTo(size * 0.8, 0); ctx.lineTo(0, size); ctx.lineTo(-size * 0.8, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+        if (diamond.collected) continue; const pulse = Math.sin(state.time * 5 + diamond.pulse) * 2; const size = diamond.radius + pulse;
+        ctx.save(); ctx.translate(diamond.x, diamond.y); ctx.fillStyle = '#38bdf8'; ctx.strokeStyle = '#dbeafe'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -size); ctx.lineTo(size * 0.8, 0); ctx.lineTo(0, size); ctx.lineTo(-size * 0.8, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
       }
       ctx.restore();
     }
@@ -997,7 +1081,7 @@
       for (const item of pickups) {
         if (item.collected) continue;
         if (item.type === 'weapon') { ctx.fillStyle = item.color; ctx.fillRect(item.x - 12, item.y - 12, 24, 24); }
-        if (item.type === 'ammo') { ctx.fillStyle = item.color; ctx.fillRect(item.x - 10, item.y - 10, 20, 20); ctx.fillStyle = '#0f172a'; ctx.font = 'bold 10px Arial'; ctx.textAlign = 'center'; ctx.fillText(item.weapon === 'pistol' ? 'P' : 'A', item.x, item.y + 4); }
+        if (item.type === 'ammo') { ctx.fillStyle = item.color; ctx.fillRect(item.x - 10, item.y - 10, 20, 20); ctx.fillStyle = '#0f172a'; ctx.font = 'bold 10px Arial'; ctx.textAlign = 'center'; ctx.fillText(item.weapon === 'pistol' ? 'P' : item.weapon === 'ak47' ? 'A' : 'S', item.x, item.y + 4); }
         if (item.type === 'heal') { ctx.fillStyle = '#86efac'; ctx.fillRect(item.x - 12, item.y - 12, 24, 24); ctx.fillStyle = '#14532d'; ctx.fillRect(item.x - 3, item.y - 12, 6, 24); ctx.fillRect(item.x - 12, item.y - 3, 24, 6); }
       }
       ctx.restore();
@@ -1014,9 +1098,11 @@
       ctx.save(); ctx.translate(-state.camera.x, -state.camera.y);
       for (const mob of monsters) {
         if (mob.dead) continue;
-        const color1 = mob.boss ? '#f97316' : (mob.fire ? '#f97316' : '#7bcf72');
-        const color2 = mob.boss ? '#fdba74' : '#4b7f3b';
-        ctx.save(); ctx.translate(mob.x, mob.y); ctx.fillStyle = color2; ctx.fillRect(-mob.radius * 0.8, -mob.radius * 0.5, mob.radius * 1.6, mob.radius * 1.1); ctx.fillStyle = color1; ctx.beginPath(); ctx.arc(0, -mob.radius * 0.8, mob.radius * 0.8, 0, Math.PI * 2); ctx.fill();
+        const color1 = mob.boss ? '#f97316' : mob.fire ? '#f97316' : mob.type && mob.type.includes('snow') ? '#dbeafe' : '#7bcf72';
+        const color2 = mob.boss ? '#fdba74' : mob.type && mob.type.includes('snow') ? '#93c5fd' : '#4b7f3b';
+        ctx.save(); ctx.translate(mob.x, mob.y);
+        ctx.fillStyle = color2; ctx.fillRect(-mob.radius * 0.8, -mob.radius * 0.5, mob.radius * 1.6, mob.radius * 1.1);
+        ctx.fillStyle = color1; ctx.beginPath(); ctx.arc(0, -mob.radius * 0.8, mob.radius * 0.8, 0, Math.PI * 2); ctx.fill();
         if (mob.boss) { ctx.fillStyle = '#fb923c'; for (let i = 0; i < 8; i++) { const ang = (Math.PI * 2 * i) / 8 + state.time * 2; const r = mob.radius + 12 + Math.sin(state.time * 5 + i) * 6; ctx.beginPath(); ctx.arc(Math.cos(ang) * r, Math.sin(ang) * r, 4, 0, Math.PI * 2); ctx.fill(); } }
         ctx.restore();
         const barW = mob.boss ? 120 : 60; const barX = mob.x - barW / 2; const barY = mob.y - mob.radius - 18; ctx.fillStyle = '#111827'; ctx.fillRect(barX, barY, barW, 6); ctx.fillStyle = '#ef4444'; ctx.fillRect(barX, barY, barW * (mob.health / mob.maxHealth), 6);
@@ -1025,26 +1111,21 @@
     }
 
     function drawPlayer() {
-      const px = player.x - state.camera.x; const py = player.y - state.camera.y;
-      ctx.save(); ctx.translate(px, py); ctx.rotate(player.angle);
+      const px = player.x - state.camera.x; const py = player.y - state.camera.y; ctx.save(); ctx.translate(px, py); ctx.rotate(player.angle);
       ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.ellipse(0, player.radius * 0.9, player.radius * 0.7, player.radius * 0.35, 0, 0, Math.PI * 2); ctx.fill();
       const skin = skinCatalog[player.skin] || skinCatalog.classic; ctx.fillStyle = skin.color; ctx.fillRect(-9, -4, 18, 20); ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.arc(0, -16, 10, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#1f2937'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-6, 14); ctx.lineTo(-10, 30); ctx.moveTo(6, 14); ctx.lineTo(10, 30); ctx.stroke();
-      ctx.fillStyle = '#d2d6db'; ctx.fillRect(12, -3, 18, 6); if (player.weapon === 'ak47') { ctx.fillStyle = '#cbd5e1'; ctx.fillRect(12, -5, 22, 10); } else if (player.weapon === 'pistol') { ctx.fillStyle = '#dbeafe'; ctx.fillRect(12, -4, 16, 8); }
+      ctx.fillStyle = '#d2d6db'; ctx.fillRect(12, -3, 18, 6); if (player.weapon === 'ak47') { ctx.fillStyle = '#cbd5e1'; ctx.fillRect(12, -5, 22, 10); } else if (player.weapon === 'pistol') { ctx.fillStyle = '#dbeafe'; ctx.fillRect(12, -4, 16, 8); } else if (player.weapon === 'shotgun') { ctx.fillStyle = '#fca5a5'; ctx.fillRect(12, -4, 16, 8); }
       if (player.shootFlash > 0) { ctx.fillStyle = '#fef08a'; ctx.beginPath(); ctx.arc(28, 0, 7 + player.shootFlash * 8, 0, Math.PI * 2); ctx.fill(); }
       ctx.restore();
     }
 
     function drawParticles() {
-      ctx.save(); ctx.translate(-state.camera.x, -state.camera.y);
-      for (const p of particles) { ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill(); }
-      ctx.restore();
+      ctx.save(); ctx.translate(-state.camera.x, -state.camera.y); for (const p of particles) { ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill(); } ctx.restore();
     }
 
     function drawEffects() {
       for (const effect of effects) {
-        if (effect.type === 'swing') {
-          const x = effect.x - state.camera.x; const y = effect.y - state.camera.y; ctx.save(); ctx.globalAlpha = Math.max(0, effect.life * 8); ctx.strokeStyle = effect.color; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(x, y, effect.radius, 0, Math.PI * 1.8); ctx.stroke(); ctx.restore();
-        }
+        if (effect.type === 'swing') { const x = effect.x - state.camera.x; const y = effect.y - state.camera.y; ctx.save(); ctx.globalAlpha = Math.max(0, effect.life * 8); ctx.strokeStyle = effect.color; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(x, y, effect.radius, 0, Math.PI * 1.8); ctx.stroke(); ctx.restore(); }
         if (effect.type === 'text') { ctx.save(); ctx.globalAlpha = Math.max(0, effect.life * 1.1); ctx.fillStyle = effect.color; ctx.font = 'bold 28px Arial'; ctx.textAlign = 'center'; ctx.fillText(effect.text, effect.x, effect.y); ctx.restore(); }
         if (effect.type === 'reload') { const p = player; ctx.save(); ctx.fillStyle = '#dbeafe'; ctx.fillRect(p.x - state.camera.x - 18, p.y - state.camera.y - 35, 36, 5); ctx.fillStyle = '#1d4ed8'; const ratio = 1 - effect.life / effect.timer; ctx.fillRect(p.x - state.camera.x - 18, p.y - state.camera.y - 35, 36 * ratio, 5); ctx.restore(); }
       }
@@ -1063,12 +1144,7 @@
     }
 
     function updateInventoryUI() {
-      const items = [
-        { key: 'knife', label: 'Knife', icon: 'K' },
-        { key: 'pistol', label: 'Pistol', icon: 'P' },
-        { key: 'ak47', label: 'AK47', icon: 'A' },
-        { key: 'shotgun', label: 'Shotgun', icon: 'S' }
-      ];
+      const items = [ { key: 'knife', label: 'Knife', icon: 'K' }, { key: 'pistol', label: 'Pistol', icon: 'P' }, { key: 'ak47', label: 'AK47', icon: 'A' }, { key: 'shotgun', label: 'Shotgun', icon: 'S' } ];
       ui.inventory.innerHTML = ''; ui.inventory.classList.remove('hidden');
       items.forEach(item => {
         const unlocked = !!player.unlockedWeapons[item.key];
@@ -1087,22 +1163,17 @@
     }
 
     function updateGame(dt) {
-      if (state.gameState === 'playing') {
-        updatePlayer(dt); updateMonsters(dt); updateBullets(dt); updateEffects(dt); updateWeather(dt); updateCamera();
-      }
+      if (state.gameState === 'playing') { updatePlayer(dt); updateMonsters(dt); updateBullets(dt); updateEffects(dt); updateWeather(dt); updateCamera(); }
     }
 
     function gameLoop(timestamp) {
-      const delta = Math.min((timestamp - state.lastTime) / 1000 || 0.016, 0.05);
-      state.lastTime = timestamp;
-      updateGame(delta); drawGame(); requestAnimationFrame(gameLoop);
+      const delta = Math.min((timestamp - state.lastTime) / 1000 || 0.016, 0.05); state.lastTime = timestamp; updateGame(delta); drawGame(); requestAnimationFrame(gameLoop);
     }
 
     document.addEventListener('keydown', (event) => {
       const key = event.key.toLowerCase(); state.keys[key] = true;
       if (key === 'p') { if (state.gameState === 'playing') pauseGame(); else if (state.gameState === 'paused') resumeGame(); }
-      if (key === 'h') useHeal();
-      if (key === 'f') toggleFullscreen();
+      if (key === 'h') useHeal(); if (key === 'f') toggleFullscreen();
       if (key === '1') { player.weapon = 'knife'; updateInventoryUI(); }
       if (key === '2' && player.unlockedWeapons.pistol) { player.weapon = 'pistol'; updateInventoryUI(); }
       if (key === '3' && player.unlockedWeapons.ak47) { player.weapon = 'ak47'; updateInventoryUI(); }
@@ -1119,34 +1190,17 @@
     function loadRuntimeProgress() {
       const save = readSaveProgress();
       if (save) {
-        state.chapter = save.chapter || 1;
-        state.level = save.level || 1;
-        player.weapon = save.weapon || 'knife';
-        player.unlockedWeapons = save.unlockedWeapons || { knife: true, pistol: false, ak47: false, shotgun: false };
-        player.ammo = save.ammo || { knife: Infinity, pistol: 0, ak47: 0, shotgun: 0 };
-        player.mag = save.mag || { knife: Infinity, pistol: 0, ak47: 0, shotgun: 0 };
-        player.healCount = save.healCount || 2;
-        player.diamonds = save.diamonds || 0;
-        player.credits = save.credits || 0;
-        player.skin = save.skin || storeProgress.selectedSkin || 'classic';
-      } else {
-        player.diamonds = 0; player.credits = 0;
-        player.skin = storeProgress.selectedSkin || 'classic';
-      }
+        state.chapter = save.chapter || 1; state.level = save.level || 1; player.weapon = save.weapon || 'knife'; player.unlockedWeapons = save.unlockedWeapons || { knife: true, pistol: false, ak47: false, shotgun: false };
+        player.ammo = save.ammo || { knife: Infinity, pistol: 0, ak47: 0, shotgun: 0 }; player.mag = save.mag || { knife: Infinity, pistol: 0, ak47: 0, shotgun: 0 };
+        player.healCount = save.healCount || 2; player.diamonds = save.diamonds || 0; player.credits = save.credits || 0; player.skin = save.skin || storeProgress.selectedSkin || 'classic';
+      } else { player.diamonds = 0; player.credits = 0; player.skin = storeProgress.selectedSkin || 'classic'; }
       CHAPTERS[2].unlocked = !!(save && save.unlockedChapters && save.unlockedChapters[2]) || false;
       CHAPTERS[3].unlocked = !!(save && save.unlockedChapters && save.unlockedChapters[3]) || false;
       calcSkinBonuses();
     }
 
     function init() {
-      resizeCanvas();
-      loadRuntimeProgress();
-      renderChapterCards();
-      renderStore();
-      updateInventoryUI();
-      updateContinueButton();
-      showMainMenu();
-      requestAnimationFrame(gameLoop);
+      resizeCanvas(); loadRuntimeProgress(); renderChapterCards(); renderStore(); updateInventoryUI(); updateContinueButton(); showMainMenu(); requestAnimationFrame(gameLoop);
     }
 
     init();
